@@ -10,8 +10,10 @@
 
 <ul>
 	<%Gossip.all.each do |i|%>
-		<%User.all.each do |x|%>
-			<a href="gossip/<%=i.id%>"><li><%=x.first_name%>  -  <%=i.title%></li></a>
-		<%end%>
+		<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <p class="card-text"><a href="gossip/<%=i.id%>"><li><%=i.user.first_name%> :<br><%=i.title%></li></a></p>
+  </div>
+</div>
 	<%end%>
 </ul>

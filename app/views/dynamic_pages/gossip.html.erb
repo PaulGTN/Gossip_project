@@ -1,15 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <a class="navbar-brand" href="/">Accueil</a>
-    <a class="navbar-brand" href="static_pages/team">Team</a>
-    <a class="navbar-brand" href="static_pages/contact">Contact</a>
+    <a class="navbar-brand" href="../static_pages/team">Team</a>
+    <a class="navbar-brand" href="../static_pages/contact">Contact</a>
   </div>
 </nav>
 <h1>Gossip</h1>
 
 <%id = params[:id]%>
 <%gossip = Gossip.find(id)%>
-<%author = Gossip.find(id).user%>
+<%author = gossip.user%>
 <%=gossip.title%>
 <br><br>
 <%=gossip.content%>
