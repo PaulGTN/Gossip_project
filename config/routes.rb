@@ -1,9 +1,24 @@
 Rails.application.routes.draw do
-  get '/', to: 'dynamic_pages#welcome'
-  get '/gossip/:id', to: 'dynamic_pages#gossip'
-  get '/user/:id', to: 'dynamic_pages#user'
-	get 'welcome/:first_name', to: 'static_pages#welcome'
-  get 'static_pages/team', to: 'static_pages#team'
-  get 'static_pages/contact', to: 'static_pages#contact'
+  root to: 'gossips#index'
+  get 'team', to: 'static_pages#team'
+  get 'contact', to: 'static_pages#contact'
+  get 'welcome(/:first_name)', to: 'static_pages#welcome'
+
+  resources :gossips do
+    resources :comments, only: [:create]
+    resources :likes, only: [:create, :destroy]
+  end
+
+  resources :comments, except: [:index, :show] do
+    resources :comments, only: [:create]
+    resources :likes, only: [:create, :destroy]
+  end
+
+  resources :users, only: [:show, :new, :create]
+  
+  resources :cities, only: [:show]
+
+  resources :sessions, only: [:create, :new, :destroy]
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

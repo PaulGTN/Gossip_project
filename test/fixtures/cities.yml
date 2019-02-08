@@ -2,8 +2,8 @@
 
 one:
   name: MyString
-  postal_code: MyString
+  zi_code: MyString
 
 two:
   name: MyString
-  postal_code: MyString
+  zi_code: MyString

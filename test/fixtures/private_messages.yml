@@ -2,6 +2,8 @@
 
 one:
   content: MyText
+  sender: one
 
 two:
   content: MyText
+  sender: two

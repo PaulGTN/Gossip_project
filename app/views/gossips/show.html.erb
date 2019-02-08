@@ -1,0 +1,119 @@
+<% if flash[:danger] != nil %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <h4>Alerte</h4>
+      <p><%=flash[:danger]%></p>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+<% end %>
+<% if flash[:alert] != nil %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <p>L'opération <%=flash[:alert]%> a été un succès</p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% end %>
+
+<div class='d-flex align-items-end'>
+    <h1>Voici votre potin : </h1>
+    <%= link_to(gossip_likes_path(@gossip.id), method: :post, :class => 'm-2 ') do %>
+        <i class='fas fa-thumbs-up' style='font-size:48px;color:blue'></i>
+    <% end %>
+    <p class='m-0 p-0' style='font-size:48px;color:blue'> <%=@gossip.likes.size%> </p>
+    <%= link_to(gossip_like_path(@gossip.id), method: :delete, :class => 'm-2 ') do %>
+        <i class='fas fa-thumbs-up' style='font-size:48px;color:red'></i>
+    <% end %>
+</div>
+
+    <div class="card p-2 m-2">
+      <%= image_tag get_random_image, class: "card-img-top" %>
+      <div class="card-body">
+        <h5 class="card-title"><%=@gossip.title%></h5>
+        <p class="card-text"><%=@gossip.content%></p>
+      </div>
+    </div>
+
+<h4>Tags associés à ce potin</h4>
+<div class="d-flex flex-wrap">
+    <%@tags.each do |tag|%>
+    <div class="card m-2 p-2" style="width: 10rem;">
+        <p class="card-text d-flex justify-content-center"><%=tag.title%></p>
+    </div>
+    <%end%>
+</div>
+    <br /> <br />
+
+<p>Et voici l'utilisateur qui a publié ce potin : <a href="<%=user_path(@user.id)%>"> <%=@user.name%> </a></p>
+<p>Et voici la ville où vit l'auteur qui a publié ce potin : <a href="<%=city_path(@city.id)%>"> <%=@city.name%> </a></p>
+    <br /> <br />
+
+<%= form_tag("/gossips/#{@gossip.id}/comments", method: "post") do %>
+
+    <%= label_tag 'Nouveau commentaire' %>
+    <%= text_area_tag 'content', @comment.content, class: 'form-control' %>
+    <br />
+    <%= submit_tag "Publier" , class: 'btn btn-primary'%>
+
+<% end %>
+    <br /> <br />
+
+<h3>Liste des commentaires</h3>
+
+<%@comments.each do |comment|%>
+    <div class="card p-1 col-12 m-2">
+        <blockquote class="blockquote mb-0 card-body">
+            <p><%=comment.content%></p>
+            <footer class="blockquote-footer">
+                <small class="text-muted">
+                    Posté par <cite title="Source Title"><%=comment.user.name%></cite>
+                </small>
+            </footer>
+        </blockquote>
+        <div class="d-flex align-items-end">
+            <%= form_tag("/comments/#{comment.id}/comments", method: "post") do %>
+
+                <%= label_tag 'Nouveau commentaire' %>
+                <%= text_area_tag 'content', @comment.content, class: 'form-control' %>
+                <br />
+                <%= submit_tag "Publier" , class: 'btn btn-primary'%>
+
+            <% end %>
+            <a href="/comments/<%=comment.id%>/edit" class="btn btn-warning m-1">Editer le commentaire</a>
+            <a href="/comments/<%=comment.id%>" class="btn btn-danger m-1" data-confirm="Voulez-vous vraiment supprimer ce commentaire" data-method="DELETE">Supprimer le commentaire</a>
+            <%= link_to(comment_likes_path(comment.id), method: :post, :class => 'm-2 ') do %>
+                <i class='fas fa-thumbs-up' style='font-size:48px;color:blue'></i>
+            <% end %>
+            <p class='m-2' style='font-size:48px;color:blue'> <%=comment.likes.size%> </p>
+            <%= link_to(comment_like_path(comment.id), method: :delete, :class => 'm-2 ') do %>
+                <i class='fas fa-thumbs-up' style='font-size:48px;color:red'></i>
+            <% end %>
+
+        </div>
+    </div>
+    <%comment.comments.each do |c|%>
+        <div class="card p-1 col-8 m-2 float-right" style="font">
+            <blockquote class="blockquote mb-0 card-body">
+                <p><%=c.content%></p>
+                <footer class="blockquote-footer">
+                    <small class="text-muted">
+                        Posté par <cite title="Source Title"><%=c.user.name%></cite>
+                    </small>
+                </footer>
+            </blockquote>
+            <div class="d-flex align-items-center">
+                <a href="/comments/<%=c.id%>/edit" class="btn btn-warning m-1">Editer le commentaire</a>
+                <a href="/comments/<%=c.id%>" class="btn btn-danger m-1" data-confirm="Voulez-vous vraiment supprimer ce commentaire" data-method="DELETE">Supprimer le commentaire</a>
+                <%= link_to(comment_likes_path(c.id), method: :post, :class => 'm-2 ') do %>
+                    <i class='fas fa-thumbs-up' style='font-size:48px;color:blue'></i>
+                <% end %>
+                <p class='m-2' style='font-size:48px;color:blue'> <%=c.likes.size%> </p>
+                <%= link_to(comment_like_path(comment.id), method: :delete, :class => 'm-2 ') do %>
+                    <i class='fas fa-thumbs-up' style='font-size:48px;color:red'></i>
+                <% end %>
+            </div>
+        </div>
+    <%end%>
+<%end%>
+
